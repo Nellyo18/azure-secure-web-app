@@ -154,3 +154,112 @@ Microsoft Defender for Cloud Foundational CSPM is enabled with full monitoring c
 The **Microsoft Cloud Security Benchmark (MCSB)** is enabled at the subscription level to provide security posture assessments and recommendations.
 
 Paid Defender workload protection plans were intentionally not enabled for this lab to maintain cost control while retaining foundational CSPM capabilities.
+
+## CI/CD and Deployment Automation
+
+Application deployment is automated using **GitHub Actions**.
+
+Changes committed to the `main` branch can trigger the deployment workflow, allowing application updates to be deployed consistently to Azure App Service.
+
+### Deployment Flow
+
+The CI/CD process follows this general flow:
+
+1. Application code is stored in GitHub.
+2. GitHub Actions starts the deployment workflow.
+3. GitHub authenticates to Microsoft Entra ID using OpenID Connect (OIDC).
+4. Microsoft Entra ID validates the configured federated credential.
+5. The GitHub deployment identity receives temporary Azure credentials.
+6. GitHub Actions deploys the Python Flask application to Azure App Service.
+
+This approach avoids storing a long-lived Azure client secret in GitHub.
+
+### Workload Identity Federation
+
+A user-assigned managed identity is used as the deployment identity for GitHub Actions.
+
+A federated identity credential establishes trust between:
+
+- Microsoft Entra ID
+- The GitHub repository
+- The `main` branch
+
+The federated identity uses the audience:
+
+`api://AzureADTokenExchange`
+
+The deployment identity is assigned the `Website Contributor` role at the App Service scope, limiting its Azure permissions to those required for application deployment.
+
+### Separation of Responsibilities
+
+CI/CD authentication and application runtime authentication use separate identities.
+
+GitHub Actions uses a federated deployment identity to deploy the application, while Azure App Service uses its system-assigned managed identity to access Azure SQL Database and Azure Key Vault at runtime.
+
+This separation reduces the permissions associated with each identity and limits the impact of credential or identity compromise.
+
+## Troubleshooting and Engineering Challenges
+
+Building the environment required troubleshooting several real-world cloud integration issues.
+
+### GitHub Actions OIDC Federation
+
+#### Problem
+
+Azure Deployment Center initially failed to configure GitHub Actions authentication and could not verify how GitHub issued OIDC tokens for the repository.
+
+#### Investigation
+
+The deployment identity had been created in Azure, but the required federated identity credential was not configured.
+
+Without the federated credential, Microsoft Entra ID could not establish trust with GitHub Actions.
+
+#### Resolution
+
+A federated identity credential was manually configured for the GitHub repository and `main` branch using the Azure AD token exchange audience.
+
+After establishing the federated trust relationship, Azure Deployment Center successfully configured the GitHub Actions workflow and deployments completed successfully.
+
+#### Lesson Learned
+
+OIDC authentication depends on a trust relationship between the external workload and Microsoft Entra ID. The identity existing in Azure is not sufficient by itself; the token issuer, subject, and audience must match the configured federated credential.
+
+### Application Insights Request Telemetry
+
+#### Problem
+
+Application Insights initially displayed dependency telemetry, but incoming Flask HTTP requests were not appearing in the `AppRequests` table in Log Analytics.
+
+#### Investigation
+
+The Azure Monitor OpenTelemetry configuration was initialized after Flask had already been imported and the application object had been created.
+
+Because Flask auto-instrumentation depends on initialization order, incoming request instrumentation was not being applied correctly.
+
+#### Resolution
+
+Azure Monitor OpenTelemetry was configured before importing and initializing Flask.
+
+The application initialization order was changed so that:
+
+1. Azure Monitor OpenTelemetry is configured.
+2. Flask is imported.
+3. The Flask application is created.
+4. Application routes are initialized.
+
+After redeployment, incoming requests appeared successfully in the `AppRequests` table.
+
+#### Verification
+
+The following application routes generated request telemetry:
+
+- `/`
+- `/database`
+- `/messages`
+- `/keyvault`
+
+Request data could then be analyzed using KQL in Log Analytics.
+
+#### Lesson Learned
+
+Application observability can depend on initialization order. Successful dependency telemetry does not necessarily mean that request-level instrumentation is configured correctly.
