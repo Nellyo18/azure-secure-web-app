@@ -1,0 +1,3 @@
+location            = "Central US"
+resource_group_name = "rg-secure-web-prod"
+vnet_name            = "vnet-secure-web-prod"
