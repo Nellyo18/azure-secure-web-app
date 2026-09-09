@@ -64,3 +64,93 @@ The architecture separates application hosting, private backend connectivity, id
 ### Architecture Diagram
 
 ![Secure Azure Web Application Architecture](docs/architecture.png)
+
+## Identity & Access Management
+
+The solution uses Microsoft Entra ID and managed identities to minimize the use of stored credentials and implement least-privilege access.
+
+### Application Runtime Identity
+
+Azure App Service uses a **system-assigned managed identity** to authenticate to backend Azure services.
+
+The application requests Microsoft Entra ID access tokens at runtime instead of storing database passwords or service credentials in the application code.
+
+The managed identity is used to access:
+
+- **Azure SQL Database** using Microsoft Entra authentication
+- **Azure Key Vault** using Azure RBAC
+
+For Azure SQL Database, the App Service managed identity is configured as a database user and granted only the permissions required by the application:
+
+- `db_datareader`
+- `db_datawriter`
+
+The application is not granted `db_owner`.
+
+For Azure Key Vault, the App Service managed identity is assigned the:
+
+- `Key Vault Secrets User`
+
+role at the Key Vault scope.
+
+This allows the application to retrieve secrets while preventing unnecessary secret-management permissions.
+
+### CI/CD Identity
+
+GitHub Actions uses **OpenID Connect (OIDC)** and Microsoft Entra workload identity federation to authenticate to Azure.
+
+This eliminates the need to store a long-lived Azure client secret in the GitHub repository.
+
+The deployment identity is granted:
+
+- `Website Contributor`
+
+scoped to the Azure App Service.
+
+This separates deployment permissions from the application's runtime permissions.
+
+### Identity Architecture
+
+Two separate identities are intentionally used:
+
+| Identity | Purpose | Access |
+|---|---|---|
+| GitHub federated identity | CI/CD deployment | Deploy application to Azure App Service |
+| App Service system-assigned managed identity | Application runtime | Access Azure SQL Database and Azure Key Vault |
+
+Separating deployment and runtime identities reduces privilege exposure and follows the principle of least privilege.
+
+## Security Controls
+
+Security was incorporated throughout the architecture rather than added only after deployment.
+
+### Network Security
+
+- Azure SQL Database uses a Private Endpoint.
+- Azure Key Vault uses a Private Endpoint.
+- Public network access is disabled for backend services during normal operation.
+- Private DNS zones provide name resolution for Private Link resources.
+- Dedicated subnets separate application integration, private endpoints, and management resources.
+- Network Security Groups are used to define network traffic controls.
+
+### Identity Security
+
+- Microsoft Entra ID provides centralized identity.
+- Managed Identity eliminates stored runtime credentials.
+- GitHub Actions uses OIDC instead of a long-lived Azure client secret.
+- Azure RBAC implements least-privilege access.
+- SQL database permissions are limited to required read/write roles.
+
+### Secrets Management
+
+Azure Key Vault provides centralized secrets management.
+
+The Flask application retrieves secrets at runtime using its managed identity instead of embedding secrets directly in source code.
+
+### Security Posture Management
+
+Microsoft Defender for Cloud Foundational CSPM is enabled with full monitoring coverage.
+
+The **Microsoft Cloud Security Benchmark (MCSB)** is enabled at the subscription level to provide security posture assessments and recommendations.
+
+Paid Defender workload protection plans were intentionally not enabled for this lab to maintain cost control while retaining foundational CSPM capabilities.
