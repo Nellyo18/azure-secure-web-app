@@ -31,7 +31,4 @@ variable "sql_entra_admin_object_id" {
   type        = string
 }
 
-variable "sql_database_sku" {
-  description = "Azure SQL Database SKU"
-  type        = string
-}
+
