@@ -3,3 +3,4 @@ gunicorn
 pyodbc
 azure-identity
 azure-keyvault-secrets
+azure-monitor-opentelemetry
