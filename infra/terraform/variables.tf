@@ -15,3 +15,23 @@ variable "vnet_name" {
   type        = string
   default     = "vnet-secure-web-prod"
 }
+
+variable "tenant_id" {
+  description = "Microsoft Entra tenant ID"
+  type        = string
+}
+
+variable "sql_entra_admin_name" {
+  description = "Display name of the Microsoft Entra administrator for Azure SQL"
+  type        = string
+}
+
+variable "sql_entra_admin_object_id" {
+  description = "Object ID of the Microsoft Entra administrator for Azure SQL"
+  type        = string
+}
+
+variable "sql_database_sku" {
+  description = "Azure SQL Database SKU"
+  type        = string
+}
