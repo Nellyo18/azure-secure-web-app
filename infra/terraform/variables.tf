@@ -31,4 +31,8 @@ variable "sql_entra_admin_object_id" {
   type        = string
 }
 
-
+variable "alert_email_address" {
+  description = "Email address that receives Azure Monitor alert notifications"
+  type        = string
+  sensitive   = true
+}
