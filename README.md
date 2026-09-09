@@ -1,20 +1,39 @@
 # Secure Azure Web Application
 
-A cloud security portfolio project demonstrating the design, deployment, and security of a Python Flask web application on Microsoft Azure.
+## Azure Cloud Engineering & Security Portfolio Project
 
-The application is hosted on Azure App Service and integrates securely with Azure SQL Database and Azure Key Vault using private networking and passwordless authentication. The environment also implements CI/CD with GitHub Actions and OpenID Connect (OIDC), centralized application monitoring with Azure Monitor and Application Insights, and automated HTTP error alerting.
+A production-inspired Microsoft Azure environment demonstrating hands-on skills in cloud infrastructure, administration, architecture, networking, identity, security, automation, application hosting, and monitoring.
+
+This project deploys a Python Flask web application to Azure App Service and securely integrates it with Azure SQL Database and Azure Key Vault. The environment uses Azure Virtual Network integration, Private Endpoints, Private DNS, Microsoft Entra ID, Managed Identity, role-based access control (RBAC), GitHub Actions with OpenID Connect (OIDC), Application Insights, Log Analytics, Azure Monitor, and Microsoft Defender for Cloud.
+
+The project was designed not only to deploy a working application, but to demonstrate how Azure services can be architected, administered, secured, monitored, and automated using cloud best practices.
+
+## Career Skills Demonstrated
+
+This project demonstrates hands-on skills applicable to:
+
+- **Cloud Engineer** — Azure resource deployment, networking, PaaS integration, identity, monitoring, troubleshooting, and CI/CD
+- **Cloud Administrator** — resource management, RBAC, monitoring, configuration, networking, access control, and operational troubleshooting
+- **Cloud Architect** — solution design, network segmentation, service integration, private connectivity, identity architecture, availability considerations, and security design
+- **Cloud Security Engineer** — least privilege, Managed Identity, Private Endpoints, secrets management, security monitoring, CSPM, and secure CI/CD
 
 ## Project Objectives
 
-The goal of this project is to build a production-inspired Azure environment while applying cloud security best practices, including:
+The primary objectives of this project are to:
 
-- Network segmentation using Azure Virtual Network and dedicated subnets
-- Private connectivity to Azure SQL Database and Azure Key Vault using Private Endpoints
-- Private DNS resolution for Azure PaaS resources
-- Passwordless authentication using Microsoft Entra ID and Managed Identity
-- Least-privilege access using Azure RBAC and SQL database roles
-- Secure CI/CD authentication using GitHub Actions and OIDC
-- Application monitoring using OpenTelemetry and Application Insights
-- Centralized logging and KQL analysis using Log Analytics
-- Automated detection and email alerting using Azure Monitor
-- Cloud security posture assessment using Microsoft Defender for Cloud and the Microsoft Cloud Security Benchmark
+- Design a secure Azure cloud architecture using multiple integrated Azure services
+- Deploy and administer a Python web application using Azure App Service
+- Design a segmented virtual network using dedicated Azure subnets
+- Integrate Azure PaaS services using VNet Integration and Private Endpoints
+- Implement private DNS resolution for privately connected Azure services
+- Secure Azure SQL Database and Azure Key Vault from unnecessary public network access
+- Implement passwordless service-to-service authentication using Managed Identity
+- Apply least-privilege authorization using Azure RBAC and SQL database roles
+- Implement CI/CD using GitHub Actions and OpenID Connect (OIDC)
+- Monitor application performance and requests using OpenTelemetry and Application Insights
+- Centralize telemetry and analyze events using Log Analytics and KQL
+- Detect repeated HTTP failures using Azure Monitor alert rules
+- Deliver automated security and operational notifications using Azure Monitor Action Groups
+- Assess cloud security posture using Microsoft Defender for Cloud
+- Evaluate resources against the Microsoft Cloud Security Benchmark
+- Document and automate the infrastructure using Infrastructure as Code
