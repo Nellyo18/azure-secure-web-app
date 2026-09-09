@@ -37,3 +37,29 @@ The primary objectives of this project are to:
 - Assess cloud security posture using Microsoft Defender for Cloud
 - Evaluate resources against the Microsoft Cloud Security Benchmark
 - Document and automate the infrastructure using Infrastructure as Code
+
+## Solution Architecture
+
+The solution uses Azure Platform as a Service (PaaS) components combined with private networking, identity-based authentication, CI/CD automation, and centralized monitoring.
+
+The architecture separates application hosting, private backend connectivity, identity, deployment automation, and observability into distinct layers.
+
+### Architecture Highlights
+
+- Azure App Service hosts the Python Flask application.
+- Azure Virtual Network Integration provides outbound connectivity from App Service into the virtual network.
+- Dedicated subnets separate application integration, private endpoints, and management resources.
+- Azure SQL Database is accessed through a Private Endpoint.
+- Azure Key Vault is accessed through a Private Endpoint.
+- Private DNS zones provide name resolution for privately connected Azure services.
+- Microsoft Entra Managed Identity provides passwordless runtime authentication.
+- Azure RBAC and SQL database roles enforce least-privilege authorization.
+- GitHub Actions provides automated application deployment.
+- OpenID Connect (OIDC) provides passwordless authentication between GitHub Actions and Azure.
+- Application Insights and OpenTelemetry collect application telemetry.
+- Log Analytics centralizes telemetry for analysis using KQL.
+- Azure Monitor detects repeated HTTP errors and sends notifications through an Action Group.
+- Microsoft Defender for Cloud provides cloud security posture management using Foundational CSPM and the Microsoft Cloud Security Benchmark.
+
+### Architecture Diagram
+
