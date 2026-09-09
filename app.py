@@ -4,13 +4,18 @@ import struct
 import pyodbc
 from azure.identity import DefaultAzureCredential
 from flask import Flask, request
-
+from azure.keyvault.secrets import SecretClient
 app = Flask(__name__)
 
 SQL_SERVER = os.environ["SQL_SERVER"]
 SQL_DATABASE = os.environ["SQL_DATABASE"]
+KEY_VAULT_URL = os.environ["KEY_VAULT_URL"]
+credential = DefaultAzureCredential()
 
-
+secret_client = SecretClient(
+    vault_url=KEY_VAULT_URL,
+    credential=credential
+)
 def get_db_connection():
     credential = DefaultAzureCredential()
 
@@ -165,7 +170,23 @@ def add_message():
         <pre>{str(error)}</pre>
         """, 500
 
+@app.route("/keyvault")
+def keyvault_test():
+    try:
+        secret = secret_client.get_secret("portfolio-banner")
 
+        return f"""
+        <h1>Azure Key Vault Connection Successful</h1>
+        <p>Secret retrieved:</p>
+        <p>{secret.value}</p>
+        <p><a href="/">Back Home</a></p>
+        """
+
+    except Exception as error:
+        return f"""
+        <h1>Key Vault Connection Failed</h1>
+        <pre>{str(error)}</pre>
+        """, 500
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000)
 
