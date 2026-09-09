@@ -260,6 +260,82 @@ The following application routes generated request telemetry:
 
 Request data could then be analyzed using KQL in Log Analytics.
 
+## Monitoring, Logging & Alerting
+
+The environment implements centralized application monitoring and automated alerting using Azure-native observability services.
+
+### Monitoring Architecture
+
+Application telemetry follows this flow:
+
+`Python Flask → OpenTelemetry → Application Insights → Log Analytics → Azure Monitor → Action Group → Email Notification`
+
+### OpenTelemetry and Application Insights
+
+The Python Flask application uses the Azure Monitor OpenTelemetry distribution to automatically collect application telemetry.
+
+Application Insights provides visibility into:
+
+- HTTP requests
+- Request response times
+- HTTP status codes
+- Application dependencies
+- Azure SDK operations
+- Application failures
+
+Telemetry is sent to the Log Analytics workspace for centralized analysis.
+
+### Log Analytics and KQL
+
+Kusto Query Language (KQL) is used to analyze application request telemetry.
+
+For example, the following query identifies HTTP requests that failed or returned an HTTP status code of 400 or greater:
+
+```kusto
+AppRequests
+| where TimeGenerated > ago(24h)
+| where Success == false or toint(ResultCode) >= 400
+| project TimeGenerated, Name, Url, ResultCode, DurationMs
+| order by TimeGenerated desc
 #### Lesson Learned
 
 Application observability can depend on initialization order. Successful dependency telemetry does not necessarily mean that request-level instrumentation is configured correctly.
+
+## Application & Data Layer
+
+The application is a Python Flask web application hosted on Azure App Service.
+
+The application provides several routes that demonstrate integration with Azure services:
+
+| Route | Purpose |
+|---|---|
+| `/` | Application home page |
+| `/database` | Tests passwordless connectivity to Azure SQL Database |
+| `/messages` | Retrieves messages stored in Azure SQL Database |
+| `/add-message` | Inserts a message into Azure SQL Database using parameterized SQL |
+| `/keyvault` | Demonstrates secure retrieval of a secret from Azure Key Vault |
+
+### Azure SQL Database
+
+Application data is stored in Azure SQL Database.
+
+The database contains a `Messages` table used to demonstrate application read/write operations.
+
+The Flask application does not use a traditional SQL username and password. Instead, the App Service system-assigned managed identity requests a Microsoft Entra access token for Azure SQL Database.
+
+The managed identity is granted only:
+
+- `db_datareader`
+- `db_datawriter`
+
+This allows the application to perform required database operations without receiving administrative database privileges.
+
+### Azure Key Vault
+
+Azure Key Vault provides centralized secrets management.
+
+The Flask application authenticates to Key Vault using its system-assigned managed identity and retrieves secrets using the Azure SDK.
+
+The application therefore does not require Key Vault credentials to be embedded in source code.
+
+Both Azure SQL Database and Azure Key Vault normally have public network access disabled and are reached through Private Endpoints.
