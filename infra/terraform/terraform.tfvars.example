@@ -1,3 +1,7 @@
 location            = "Central US"
 resource_group_name = "rg-secure-web-prod"
 vnet_name            = "vnet-secure-web-prod"
+
+tenant_id                 = "<YOUR-TENANT-ID>"
+sql_entra_admin_name      = "<YOUR-ENTRA-ADMIN-NAME>"
+sql_entra_admin_object_id = "<YOUR-ENTRA-ADMIN-OBJECT-ID>"
