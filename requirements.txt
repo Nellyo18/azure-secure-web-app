@@ -2,3 +2,4 @@ Flask
 gunicorn
 pyodbc
 azure-identity
+azure-keyvault-secrets
