@@ -3,16 +3,19 @@ import struct
 
 import pyodbc
 from azure.identity import DefaultAzureCredential
-from flask import Flask, request
 from azure.keyvault.secrets import SecretClient
 from azure.monitor.opentelemetry import configure_azure_monitor
+
+# Configure Application Insights BEFORE importing Flask
+configure_azure_monitor()
+
+from flask import Flask, request
+
 app = Flask(__name__)
 
 SQL_SERVER = os.environ["SQL_SERVER"]
 SQL_DATABASE = os.environ["SQL_DATABASE"]
 KEY_VAULT_URL = os.environ["KEY_VAULT_URL"]
-
-configure_azure_monitor()
 
 credential = DefaultAzureCredential()
 
