@@ -63,3 +63,4 @@ The architecture separates application hosting, private backend connectivity, id
 
 ### Architecture Diagram
 
+![Secure Azure Web Application Architecture](docs/architecture.png)
