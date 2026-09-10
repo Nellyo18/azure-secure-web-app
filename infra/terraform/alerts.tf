@@ -1,7 +1,7 @@
 resource "azurerm_monitor_action_group" "app_alerts" {
   name                = "ag-secure-web-alerts"
   resource_group_name = azurerm_resource_group.main.name
-  short_name          = "SecureWeb"
+  short_name          = "SecureWebAlr"
 
   email_receiver {
     name                    = "primary-email"
