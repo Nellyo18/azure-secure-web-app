@@ -7,3 +7,5 @@ sql_entra_admin_name      = "<YOUR-ENTRA-ADMIN-NAME>"
 sql_entra_admin_object_id = "<YOUR-ENTRA-ADMIN-OBJECT-ID>"
 
 alert_email_address = "<YOUR-ALERT-EMAIL>"
+
+github_repository_owner = "<YOUR-GITHUB-USERNAME>"
