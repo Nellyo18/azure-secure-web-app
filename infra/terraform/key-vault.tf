@@ -18,7 +18,7 @@ resource "azurerm_private_dns_zone" "key_vault" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
-  name                  = "link-kv-vnet"
+  name                  = "mxqjzf6kava2w"
   resource_group_name   = azurerm_resource_group.main.name
   private_dns_zone_name = azurerm_private_dns_zone.key_vault.name
   virtual_network_id    = azurerm_virtual_network.main.id
@@ -33,11 +33,12 @@ resource "azurerm_private_endpoint" "key_vault" {
   subnet_id           = azurerm_subnet.private_endpoints.id
 
   private_service_connection {
-    name                           = "psc-kv-secure-web-prod"
+    name                           = "pe-kv-secure-web-prod_c293dae9-6580-4664-a240-7d87834d8035"
     private_connection_resource_id = azurerm_key_vault.app.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
   }
+}
 
   private_dns_zone_group {
     name                 = "default"
