@@ -41,3 +41,9 @@ variable "github_repository_owner" {
   description = "GitHub username or organization that owns the repository"
   type        = string
 }
+
+variable "resource_group_location" {
+  description = "Azure region where the resource group metadata is stored"
+  type        = string
+  default     = "West US 2"
+}
