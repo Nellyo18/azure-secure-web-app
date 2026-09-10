@@ -6,12 +6,7 @@ resource "azurerm_key_vault" "app" {
 
   sku_name = "standard"
 
-  rbac_authorization_enabled = true
-  public_network_access_enabled   = false
-  purge_protection_enabled        = false
-  soft_delete_retention_days      = 90
-
-  enable_rbac_authorization     = true
+  rbac_authorization_enabled    = true
   public_network_access_enabled = false
   purge_protection_enabled      = false
   soft_delete_retention_days    = 90
@@ -42,11 +37,5 @@ resource "azurerm_private_endpoint" "key_vault" {
     private_connection_resource_id = azurerm_key_vault.app.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
-  }
-}
-
-  private_dns_zone_group {
-    name                 = "default"
-    private_dns_zone_ids = [azurerm_private_dns_zone.key_vault.id]
   }
 }
