@@ -130,8 +130,26 @@ Rather than recreating the environment, the existing Azure resources were import
 
 Terraform configuration is located under:
 
+`infra/terraform/`
+
+The Terraform configuration manages the core Azure infrastructure used by this project, including:
+
+- Resource group and virtual network
+- Application, private endpoint, and management subnets
+- Network Security Group rules
+- Azure App Service and App Service Plan
+- Azure SQL Database
+- Azure Key Vault
+- Private Endpoints and Private DNS zones
+- Managed identities and Azure RBAC assignments
+- Log Analytics and Application Insights
+- Azure Monitor alerting and Action Groups
+- GitHub Actions federated identity configuration
+
+The existing Azure resources were imported into Terraform state and reconciled with the configuration. A final `terraform plan` returned:
+
 ```text
-infra/terraform/
+No changes. Your infrastructure matches the configuration.
 
 ## Security Controls
 
@@ -310,6 +328,8 @@ AppRequests
 | where Success == false or toint(ResultCode) >= 400
 | project TimeGenerated, Name, Url, ResultCode, DurationMs
 | order by TimeGenerated desc
+```
+
 #### Lesson Learned
 
 Application observability can depend on initialization order. Successful dependency telemetry does not necessarily mean that request-level instrumentation is configured correctly.
