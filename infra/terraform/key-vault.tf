@@ -1,6 +1,6 @@
 resource "azurerm_key_vault" "app" {
   name                = "kv-secure-web-nelson"
-  location            = azurerm_resource_group.main.location
+  location            = var.location
   resource_group_name = azurerm_resource_group.main.name
   tenant_id           = var.tenant_id
 
@@ -28,7 +28,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
 
 resource "azurerm_private_endpoint" "key_vault" {
   name                = "pe-kv-secure-web-prod"
-  location            = azurerm_resource_group.main.location
+  location            = var.location
   resource_group_name = azurerm_resource_group.main.name
   subnet_id           = azurerm_subnet.private_endpoints.id
 
