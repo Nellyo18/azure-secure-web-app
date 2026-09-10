@@ -36,3 +36,8 @@ variable "alert_email_address" {
   type        = string
   sensitive   = true
 }
+
+variable "github_repository_owner" {
+  description = "GitHub username or organization that owns the repository"
+  type        = string
+}
