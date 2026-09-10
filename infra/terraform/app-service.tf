@@ -25,15 +25,15 @@ resource "azurerm_linux_web_app" "app" {
     ftps_state = "Disabled"
   }
 
- app_settings = {
-  SQL_SERVER = azurerm_mssql_server.sql.fully_qualified_domain_name
+  app_settings = {
+    SQL_SERVER = azurerm_mssql_server.sql.fully_qualified_domain_name
 
-  SQL_DATABASE = azurerm_mssql_database.app.name
+    SQL_DATABASE = azurerm_mssql_database.app.name
 
-  KEY_VAULT_URL = azurerm_key_vault.app.vault_uri
+    KEY_VAULT_URL = azurerm_key_vault.app.vault_uri
 
-  APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.app.connection_string
-}
+    APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.app.connection_string
+  }
 
   https_only = true
 }

@@ -13,5 +13,5 @@ resource "azurerm_application_insights" "app" {
   resource_group_name = azurerm_resource_group.main.name
 
   application_type = "web"
-  workspace_id      = azurerm_log_analytics_workspace.app.id
+  workspace_id     = azurerm_log_analytics_workspace.app.id
 }
