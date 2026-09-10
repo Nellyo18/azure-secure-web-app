@@ -10,6 +10,11 @@ resource "azurerm_key_vault" "app" {
   public_network_access_enabled   = false
   purge_protection_enabled        = false
   soft_delete_retention_days      = 90
+
+  enable_rbac_authorization     = true
+  public_network_access_enabled = false
+  purge_protection_enabled      = false
+  soft_delete_retention_days    = 90
 }
 
 resource "azurerm_private_dns_zone" "key_vault" {

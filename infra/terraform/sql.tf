@@ -1,8 +1,8 @@
 resource "azurerm_mssql_server" "sql" {
-  name                         = "sql-nelson-secure-web-prod"
-  resource_group_name          = azurerm_resource_group.main.name
-  location                     = azurerm_resource_group.main.location
-  version                      = "12.0"
+  name                          = "sql-nelson-secure-web-prod"
+  resource_group_name           = azurerm_resource_group.main.name
+  location                      = azurerm_resource_group.main.location
+  version                       = "12.0"
   public_network_access_enabled = false
 
   azuread_administrator {
