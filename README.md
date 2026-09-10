@@ -120,6 +120,19 @@ Two separate identities are intentionally used:
 
 Separating deployment and runtime identities reduces privilege exposure and follows the principle of least privilege.
 
+## Infrastructure as Code with Terraform
+
+The Azure environment was initially built and validated through the Azure portal, then brought under Infrastructure as Code management using Terraform.
+
+Rather than recreating the environment, the existing Azure resources were imported into Terraform state and reconciled against the Terraform configuration. Each proposed change was reviewed before allowing Terraform to manage the infrastructure.
+
+### Terraform-Managed Infrastructure
+
+Terraform configuration is located under:
+
+```text
+infra/terraform/
+
 ## Security Controls
 
 Security was incorporated throughout the architecture rather than added only after deployment.
